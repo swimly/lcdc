@@ -23,6 +23,9 @@ export default {
       res: null
     }
   },
+  created () {
+    this.$localStorage.remove('token')
+  },
   methods: {
     ...mapActions({
       ActionLoginIn: 'ActionLoginIn'

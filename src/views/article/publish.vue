@@ -118,7 +118,7 @@ export default {
       }
     },
     onBlur (e) {
-      if (this.tags.indexOf(e.target.value) < 0) {
+      if (this.tags.indexOf(e.target.value) < 0 && e.target.value) {
         this.tags.push(e.target.value)
         this.form.tag = this.tags.join(',')
       } else {

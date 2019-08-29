@@ -22,7 +22,7 @@
             <router-link to="/component/publish">发布组件</router-link>
           </li>
           <li>
-            <router-link to="/logout">退出登录</router-link>
+            <router-link to="/login">退出登录</router-link>
           </li>
         </ul>
       </Poptip>
@@ -55,6 +55,10 @@ export default {
   display:flex;
   flex-direction:row;
   align-items:center;
+  .not-login{
+    font-size:0.75rem;
+    color:#262626;
+  }
   .logined{
     margin-left:2rem;
     .avatar{

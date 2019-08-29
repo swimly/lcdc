@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     getUserInfo () {
-      this.$store.dispatch('ActionMe', this.$localStorage.get('token'))
+      this.$store.dispatch('ActionMe', this)
     }
   }
 }

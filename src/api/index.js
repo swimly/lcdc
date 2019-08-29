@@ -1,4 +1,4 @@
-const type = `prod`
+const type = `dev`
 const url = type === 'dev' ? `http://127.0.0.1:3000` : `http://119.23.16.242:3000`
 const api = {
   url: url,
@@ -13,6 +13,8 @@ const api = {
   publishArticle: `${url}/article/add`,
   avatar: `${url}/upload/avatar`,
   structureList: `${url}/structure/list`,
-  structure: `${url}/structure/add`
+  structure: `${url}/structure/add`,
+  component: `${url}/component`,
+  componentList: `${url}/component/list`
 }
 export default api

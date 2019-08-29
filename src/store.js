@@ -15,6 +15,7 @@ export default new Vuex.Store({
     commentList: [],
     structureList: [],
     componentType: [],
+    components: [],
     api: api,
     logo: {
       image: '',
@@ -44,15 +45,19 @@ export default new Vuex.Store({
       })
     },
     // 通过token获取用户信息
-    MutationMe (state, token) {
+    MutationMe (state, _this) {
       axios({
         method: 'get',
         url: api.userInfo,
         headers: {
-          token: token
+          token: _this.$localStorage.get('token')
         }
       }).then(res => {
         state.userInfo = res.data.data
+        if (!res.data.status) {
+          _this.$Message.error('获取权限失败，请重新登录！')
+          _this.$router.replace('/login')
+        }
       })
     },
     // 获取文章分类
@@ -252,8 +257,47 @@ export default new Vuex.Store({
       }).then(res => {
       })
     },
+    // 添加组件
+    MUtationAddComponent (state, _this) {
+      axios({
+        method: 'post',
+        url: api.component,
+        headers: {
+          token: _this.$localStorage.get('token')
+        },
+        data: _this.form
+      }).then(res => {
+        console.log(res)
+      })
+    },
+    // 获取组件列表
+    MutationComponentList (state, _this) {
+      axios({
+        method: 'get',
+        url: api.componentList,
+        headers: {
+          token: _this.$localStorage.get('token')
+        },
+        params: {
+          classify: _this.form.classify,
+          page: _this.form.page,
+          pagesize: _this.form.pagesize,
+          total: _this.form.total
+        }
+      }).then(res => {
+        state.components = res.data.data.list
+      })
+    }
   },
   actions: {
+    // 组件列表
+    ActionComponentList ({commit}, _this) {
+      commit('MutationComponentList', _this)
+    },
+    // 添加组件
+    async ActionAddComponent ({commit}, _this) {
+      commit('MUtationAddComponent', _this)
+    },
     // 获取组件分类
     async ActionComponentType ({commit}, _this) {
       commit('MutationComponentType', _this)
@@ -295,7 +339,7 @@ export default new Vuex.Store({
     // 上传头像并更新资料
     async ActionUpdateAvatarReload ({commit, dispatch}, _this) {
       return dispatch('ActionUpdateAvatar', _this).then(() => {
-        commit('MutationMe', _this.$localStorage.get('token'))
+        commit('MutationMe', _this)
         _this.$Message.success('头像更换成功！')
       })
     },
@@ -342,15 +386,15 @@ export default new Vuex.Store({
       commit('MutationLogin', _this)
     },
     // 获取登录信息
-    async ActionMe ({dispatch, commit}, token) {
-      commit('MutationMe', token)
+    async ActionMe ({dispatch, commit}, _this) {
+      commit('MutationMe', _this)
     },
     // 登录并且获取信息
     async ActionLoginIn ({dispatch, commit, state}, _this) {
       await dispatch('ActionLogin', _this)
       var timer = setInterval(()=>{
         if (state.token) {
-          commit('MutationMe', state.token)
+          commit('MutationMe', _this)
           _this.$localStorage.set('token', state.token)
           clearInterval(timer)
         }
